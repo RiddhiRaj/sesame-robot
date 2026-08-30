@@ -155,7 +155,12 @@ void setServoAngle(uint8_t channel, int angle) {
   if (channel >= 8 || !ensurePcaReady()) return;
 
   const int logicalAngle = constrain(angle, 0, 180);
-  const int adjustedAngle = constrain(logicalAngle + servoSubtrim[channel], 0, 180);
+  // The R4/L4 horns were re-indexed at 90 degrees. Mirror the shifted lower
+  // legs so Rest travels outward while Stand remains centered at 90 degrees.
+  int movementAngle = logicalAngle;
+  if (channel == R4) movementAngle = constrain(90 - logicalAngle, 0, 180);
+  if (channel == L4) movementAngle = constrain(270 - logicalAngle, 0, 180);
+  const int adjustedAngle = constrain(movementAngle + servoSubtrim[channel], 0, 180);
   const uint16_t pulseUs = map(adjustedAngle, 0, 180, SERVO_MIN_US, SERVO_MAX_US);
   const uint16_t count = pulseUsToCount(pulseUs);
 

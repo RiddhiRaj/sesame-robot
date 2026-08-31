@@ -6,8 +6,8 @@
 #include <WiFi.h>
 #include <Wire.h>
 
-// Reuse the original project UI and movement definitions without modifying them.
-#include "../movement-sequences.h"
+// Reuse the original UI with a controller-specific movement copy.
+#include "movement-sequences-pca.h"
 #include "../captive-portal.h"
 
 // Waveshare ESP32-S3-Zero access point.
